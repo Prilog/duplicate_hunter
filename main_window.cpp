@@ -37,10 +37,13 @@ main_window::main_window(QWidget *parent) :
 
 void main_window::select_directory()
 {
-    QString dir = QFileDialog::getExistingDirectory(this, "Select Directory for THE BIG HUNT", QString(), QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
-    if (dir.size() != 0) {
-        start_dir = dir;
-        ui->label->setText(HEADER_DIR_MSG + start_dir);
+    if (thread == nullptr) {
+        full_cleaning();
+        QString dir = QFileDialog::getExistingDirectory(this, "Select Directory for THE BIG HUNT", QString(), QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+        if (dir.size() != 0) {
+            start_dir = dir;
+            ui->label->setText(HEADER_DIR_MSG + start_dir);
+        }
     }
 }
 
