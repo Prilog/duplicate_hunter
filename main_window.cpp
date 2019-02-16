@@ -70,9 +70,11 @@ void main_window::interrupt_scanning() {
 
 void main_window::run_scanning()
 {
-    if (start_dir.size() != 0) {
-        clear_table();
-        scan_directory(start_dir);
+    if (thread == nullptr) {
+        if (start_dir.size() != 0) {
+            clear_table();
+            scan_directory(start_dir);
+        }
     }
 }
 
