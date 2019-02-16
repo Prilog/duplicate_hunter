@@ -33,7 +33,44 @@ void scanner::do_scanning() {
         }
         for (auto file_list : m.toStdMap()) {
             if (file_list.second.size() > 1) {
-                emit add_file_list(file_list.second);
+                QVector <bool> vis(file_list.second.size());
+                for (int i = 0; i < file_list.second.size(); i++) {
+                    if (!vis[i]) {
+                        QFile f(file_list.second[i]);
+                        if (f.open(QIODevice::ReadOnly)) {
+                            QVector <QString> cur;
+                            cur.push_back(file_list.second[i]);
+                            for (int j = i + 1; j < file_list.second.size(); j++) {
+                                QFile cur_f(file_list.second[j]);
+                                if (cur_f.open(QIODevice::ReadOnly) && f.size() == cur_f.size()) {
+                                    char buffer[1024];
+                                    char buffer2[1024];
+                                    bool equal = true;
+                                    while (!f.atEnd()) {
+                                        qint64 buffer_size = f.read(buffer, sizeof(buffer));
+                                        cur_f.read(buffer2, sizeof(buffer2));
+                                        for (int i = 0; i < buffer_size; i++) {
+                                            if (buffer[i] != buffer2[i]) {
+                                                equal = false;
+                                                break;
+                                            }
+                                        }
+                                        if (!equal) {
+                                            break;
+                                        }
+                                    }
+                                    if (equal) {
+                                        cur.push_back(file_list.second[j]);
+                                        vis[j] = true;
+                                    }
+                                }
+                            }
+                            if (cur.size() > 0) {
+                                emit add_file_list(cur);
+                            }
+                        }
+                    }
+                }
             }
         }
     }

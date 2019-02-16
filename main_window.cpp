@@ -24,6 +24,8 @@ main_window::main_window(QWidget *parent) :
     connect(ui->run_button, SIGNAL (released()), this, SLOT (run_scanning()));
     connect(ui->interrupt_button, SIGNAL (released()), this, SLOT (interrupt_scanning()));
 
+
+
     //Tree Settings
     QTreeWidgetItem* item = new QTreeWidgetItem();
     item->setText(0, QString("Result:"));
