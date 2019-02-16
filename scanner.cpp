@@ -37,7 +37,7 @@ void scanner::do_scanning() {
             }
         }
     }
-    emit finished();
+    finish();
 }
 
 QByteArray scanner::count_hash(QFile& file) {
@@ -59,7 +59,7 @@ void scanner::collect_files() {
             break;
         }
         QFile f(scanner.next());
-        if (!scanner.fileInfo().isDir()) {
+        if (!scanner.fileInfo().isDir() && f.open(QIODevice::ReadOnly)) {
             total_size += f.size();
             add_file(f);
         }
@@ -67,6 +67,10 @@ void scanner::collect_files() {
 }
 
 void scanner::change_progress() {
+    if (total_size == 0) {
+        emit set_progress_bar(100);
+        return;
+    }
      qint64 new_percent = qint64(double(100) * (double(cur_size) / double(total_size)));
      if (new_percent != cur_percent) {
          cur_percent = new_percent;
@@ -78,6 +82,7 @@ void scanner::add_file(QFile& file) {
     files[file.size()].push_back(file.fileName());
 }
 
-void scanner::stop() {
-
+void scanner::finish() {
+    change_progress();
+    emit finished();
 }

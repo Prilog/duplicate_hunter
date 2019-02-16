@@ -28,13 +28,13 @@ private:
     void add_file(QFile& file);
     bool check_interruption();
     void change_progress();
+    void finish();
     QByteArray count_hash(QFile& file);
     QMap <qint64, QVector <QString> > files;
     QString root_directory;
     qint64 total_size, cur_size, cur_percent;
 
 public slots:
-    void stop();
 
 signals:
     void add_file_list(QVector <QString> name);

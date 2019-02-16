@@ -50,11 +50,13 @@ void main_window::clear_table()
 }
 
 void main_window::full_cleaning() {
-    start_dir.clear();
-    ui->label->setText(NO_DIR_MSG);
-    ui->progress_bar->setValue(0);
-    ui->process_label->setText(NOTHING_DOING_MSG);
-    clear_table();
+    if (thread == nullptr) {
+        start_dir.clear();
+        ui->label->setText(NO_DIR_MSG);
+        ui->progress_bar->setValue(0);
+        ui->process_label->setText(NOTHING_DOING_MSG);
+        clear_table();
+    }
 }
 
 void main_window::interrupt_scanning() {
